@@ -1,0 +1,7 @@
+venv
+.idea
+.git
+__pycache__
+nestolovaya_itmo/settings.py
+resources/templates/account
+resources/media

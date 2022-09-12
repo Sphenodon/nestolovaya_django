@@ -1,0 +1,70 @@
+{% extends "parts/commonPart.html" %}
+{% block head_title %}Добавить в меню{% endblock %}
+{% block content %}
+    <div class="container">
+
+        {% if status %}
+            <div class="alert alert-{{ status }}" role="alert">
+            {{ response_message }}
+            </div>
+        {% endif %}
+
+        <h3 class="mb-4">Добавить в меню</h3>
+        <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="food-type">Тип еды</label>
+                <select class="form-select" id="food-type" name="food_type" required="">
+                    <option selected="" disabled="" value="">Выберите...</option>
+                    {% for ft in food_type %}
+                        <option value="{{ ft.0 }}">{{ ft.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-1">
+                <a class="" href="/menu/food-type/">Добавить/изменить/удалить тип еды подробнее</a>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="food-type-detail">Тип еды подробнее</label>
+                <select class="form-select" id="food-type-detail" name="food_type_detail" required="">
+                    <option selected="" disabled="" value="">Выберите...</option>
+                    {% for ft in food_type_detail %}
+                        <option value="{{ ft.id }}">
+                            {{ ft.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Название</label>
+                <input type="text" class="form-control" id="formGroupExampleInput"
+                       placeholder="" name="title" required>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea class="form-control" placeholder="" id="floatingTextarea2"
+                          style="height: 100px" name="composition" required></textarea>
+                <label for="floatingTextarea2">Состав</label>
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Стоимость</label>
+                <input type="number" class="form-control" id="formGroupExampleInput"
+                       placeholder="" name="price" required>
+            </div>
+            <div class="mb-3">
+                <label for="id_image" class="form-label">Картинка</label>
+                <input type="file" class="form-control" id="id_image"
+                       name="image" accept="image/jpeg" required>
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Вес</label>
+                <input type="text" class="form-control" id="formGroupExampleInput"
+                       placeholder="Писать вместе с гр или мл" name="weight" required>
+            </div>
+            <div class="mb-3">
+                <label for="available" class="form-check-label">Продается в данный момент:</label>
+                <input type="checkbox" class="form-check-input" name="available" id="available" checked>
+            </div>
+            <button class="btn btn-success" type="submit">Опубликовать</button>
+        </form>
+
+    </div>
+{% endblock %}

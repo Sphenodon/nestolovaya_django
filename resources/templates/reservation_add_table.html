@@ -1,0 +1,25 @@
+{% extends "parts/commonPart.html" %}
+{% block head_title %}Добавить столик{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if status %}
+            <div class="alert alert-{{ status }}" role="alert">
+            {{ response_message }}
+            </div>
+        {% endif %}
+        <h3 class="mb-4">Добавить столик</h3>
+        <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Название</label>
+                <input type="text" class="form-control" id="formGroupExampleInput"
+                       placeholder="" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="id_image" class="form-label">Картинка</label>
+                <input type="file" class="form-control" id="id_image"
+                       name="image" accept="image/jpeg" required>
+            </div>
+            <button class="btn btn-success" type="submit">Опубликовать</button>
+        </form>
+    </div>
+{% endblock %}

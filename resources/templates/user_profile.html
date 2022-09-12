@@ -1,0 +1,67 @@
+{% extends "parts/commonPart.html" %}
+{% load static %}
+{% block head_title %}Профиль{% endblock %}
+{% block content %}
+    <div class="container">
+
+        <div class="profile-header">
+            Профиль
+            {% if user.username == user_profile.username or user.is_staff %}
+                <a class="" style="text-decoration: none !important;" href="/user/{{ user_profile.username }}/editing/">Редактировать</a>
+            {% endif %}
+        </div>
+
+        <div class="profile-card">
+            <ul class="list-group list-group-flush">
+                {% if user_id_social %}
+                    <li class="list-group-item">
+                        <p class="profile-card-subtitle">VK</p>
+                        <a href="https://vk.com/{{ user_id_social }}" target="_blank">vk.com/{{ user_id_social }}</a>
+                    </li>
+                {% endif %}
+
+                {% if user_profile.first_name %}
+                    <li class="list-group-item">
+                        <p class="profile-card-subtitle">Имя</p>
+                        {{ user_profile.first_name }}
+                    </li>
+                {% endif %}
+
+                {% if user_profile.last_name %}
+                    <li class="list-group-item">
+                        <p class="profile-card-subtitle">Фамилия</p>
+                        {{ user_profile.last_name }}
+                    </li>
+                {% endif %}
+
+                {% if user_profile.university_id %}
+                    <li class="list-group-item">
+                        <p class="profile-card-subtitle">University id</p>
+                        {{ user_profile.university_id }}
+                    </li>
+                {% endif %}
+
+                {% if user_profile.email %}
+                    <li class="list-group-item">
+                        <p class="profile-card-subtitle">Email</p>
+                        {{ user_profile.email }}
+                    </li>
+                {% endif %}
+
+                {% if user.is_staff %}
+                    <li class="list-group-item">
+                        <p class="profile-card-subtitle">Забанен</p>
+                        {% if user_profile.is_active %}
+                            Нет
+                        {% else %}
+                            Да
+                        {% endif %}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <!-- Meta -->
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "parts/commonPart.html" %}
+{% load static %}
+{% block head_title %}Меню для модераторов{% endblock %}
+{% block content %}
+    <div class="categories">
+        <div class="categories__placeholder"></div>
+        <div class="categories__wrap">
+            <div class="categories-toggle-button__wrapper">
+                <button class="categories-toggle-button">
+                    <span class="categories-toggle-icon"></span>
+                </button>
+            </div>
+            <div class="categories__container">
+                <ul class="categories__list">
+                    <div class="carousel-slider__container">
+                        <div class="carousel-slider__wrapper">
+                            {% for food_type_set in dict_queryset %}
+                                {% if food_type_set.queryset %}
+                                    <li class="categories__item">
+                                        <div class="categories__item-name scroll-to">{{ food_type_set.food_type }}</div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% for food_type_set in dict_queryset %}
+        {% if food_type_set.queryset %}
+            <h2 class="menu-title" id="{{ food_type_set.food_type }}">{{ food_type_set.food_type }}</h2>
+            <ul class="menu-list">
+            {% for i in food_type_set.queryset %}
+                <li class="menu-product">
+                    <div class="menu-product-img" style="background-image: url({{ i.image.url }});">
+                        <!---->
+                    </div>
+
+                    <div class="menu-product-info-container">
+                        <div class="menu-product-info">
+                            <div class="menu-product-info-block-container">
+                                <h5 class="menu-product-title">{{ i.title }} {% if i.available %}ПРОДАЕТСЯ ✔{% else %}НЕ ПРОДАЕТСЯ ❌{% endif %}</h5>
+                                {{ i.weight }}
+                            </div>
+                            <div class="menu-product-price">
+                                {{ i.price }} ₽
+                            </div>
+                        </div>
+                    </div>
+                    <a class="stretched-link text-dark text-decoration-none" href="/menu/detail/{{ i.id }}/"></a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/categories-slider.js' %}"></script>
+{% endblock %}

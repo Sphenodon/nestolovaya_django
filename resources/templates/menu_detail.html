@@ -1,0 +1,74 @@
+{% extends "parts/commonPart.html" %}
+{% load static %}
+{% block head_title %}{{ instance.title }}{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="menu-detail-card">
+            <div class="card-header">
+                <h5 class="mb-0">{{ instance.title }}</h5>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <img src="{{ instance.image.url }}" class="card-img-top" alt="{{ instance.title }}">
+                    <p class="menu-detail-composition-header">Состав:</p>
+                    <p class="menu-detail-composition" style="white-space: pre-line">{{ instance.composition }}</p>
+                    <p class="menu-detail-price">Цена: {{ instance.price }} р</p>
+                    <p class="menu-detail-weight">Вес/объём: {{ instance.weight }}</p>
+                    <div class="container-review">
+                        <svg class="heart-outline heart-color" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24" style="width: 48px; height: 48px;" id="like">
+                            <path fill="currentColor"></path>
+                        </svg>
+                        <svg class="heart-broken-outline heart-color" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24" style="width: 48px; height: 48px;" id="dislike">
+                            <path fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </blockquote>
+                {% if user.is_staff %}
+                    <br>
+                    <a href="/menu/update/{{ instance.id }}/" class="btn btn-dark" type="submit">Редактировать</a>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#deleteMenu">
+                    Удалить
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title alert alert-warning" id="exampleModalLabel">Внимание</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                            Пожалуйста, не удаляйте единицу меню, т.к. может потеряться важная статистика.
+                                    </div>
+                                    <div class="mb-3">
+                                            Удаляйте только в том случае, если на 100% уверены в том, что единица меню больше никогда использоваться не будет.
+                                    </div>
+                                    <div class="mb-3">
+                                            Вместо удаления измените состояние доступности единицы меню на недоступно, это можно сделать на странице редактирования.
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <a class="btn btn-secondary" href="/menu/delete/{{ instance.id }}/" type="submit">Удалить</a>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/review.js' %}"></script>
+    <!-- Meta -->
+    {{ review|json_script:"review" }}
+    {{ instance.id|json_script:"menu_id" }}
+    {{ request.user.is_authenticated|json_script:"user_auth" }}
+{% endblock %}

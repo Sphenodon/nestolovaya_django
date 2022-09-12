@@ -1,0 +1,69 @@
+{% extends "parts/commonPart.html" %}
+{% block head_title %}Редактирование {{ instance.title|lower }}{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if status %}
+            <div class="alert alert-{{ status }}" role="alert">
+            {{ response_message }}
+            </div>
+        {% endif %}
+        <h3 class="mb-4">Редактировать</h3>
+        <form method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Название</label>
+                <input type="text" class="form-control" id="formGroupExampleInput"
+                       placeholder="" name="title"
+                       value="{{ instance.title }}">
+            </div>
+            <div class="form-floating mb-3">
+                <textarea class="form-control" placeholder="" id="floatingTextarea"
+                          style="height: 100px" name="composition">{{ instance.composition }}</textarea>
+                <label for="floatingTextarea">Состав</label>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="food-type">Тип еды</label>
+                <select class="form-select" id="food-type" name="food_type" required="">
+                    <option selected="" disabled="" value="">{{ instance.get_food_type_display }}</option>
+                    {% for ft in food_type %}
+                        <option value="{{ ft.0 }}">{{ ft.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-1">
+                <a class="" href="/menu/food-type/">Добавить/изменить/удалить тип еды подробнее</a>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="food-type-detail">Тип еды подробнее</label>
+                <select class="form-select" id="food-type-detail" name="food_type_detail" required="">
+                    <option selected="" disabled="" value="">{{ instance.food_type_detail }}</option>
+                    {% for ft in food_type_detail %}
+                        <option value="{{ ft.id }}">{{ ft.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="id_image" class="form-label">Картинка</label>
+                <input type="file" class="form-control" id="id_image"
+                       name="image" accept="image/jpeg" value="{{ instance.image }}" >
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Стоимость</label>
+                <input type="number" class="form-control" id="formGroupExampleInput"
+                       placeholder="" name="price"
+                       value="{{ instance.price }}">
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Вес</label>
+                <input type="text" class="form-control" id="formGroupExampleInput"
+                       placeholder="Писать вместе с гр или мл" name="weight"
+                       value="{{ instance.weight }}">
+            </div>
+            <div class="mb-3">
+                <label for="available" class="form-check-label">Продается в данный момент:</label>
+                <input type="checkbox" class="form-check-input" name="available" id="available"
+                       {% if instance.available %} checked {% endif %}>
+            </div>
+            <input class="btn btn-dark" type="submit" value="Изменить" name="">
+        </form>
+    </div>
+{% endblock %}

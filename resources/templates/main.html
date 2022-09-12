@@ -1,0 +1,148 @@
+{% extends "parts/commonPart.html" %}
+{% load static %}
+{% block head_title %}Нестоловая{% endblock %}
+{% block content %}
+    <!-- Button trigger modal -->
+    <div class="choose-button d-grid gap-2 justify-content-end">
+        <button type="button" class="btn btn-outline-dark position-relative "
+                data-bs-toggle="modal" data-bs-target="#chooseModal1" id="btn-choose">
+            Не знаете, что выбрать?
+            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                <span class="visually-hidden">New alerts</span>
+            </span>
+        </button>
+    </div>
+
+    <div class="categories">
+        <div class="categories__placeholder"></div>
+        <div class="categories__wrap">
+            <div class="categories-toggle-button__wrapper">
+                <button class="categories-toggle-button">
+                    <span class="categories-toggle-icon"></span>
+                </button>
+            </div>
+            <div class="categories__container">
+                <ul class="categories__list">
+                    <div class="carousel-slider__container">
+                        <div class="carousel-slider__wrapper">
+                            {% for food_type_set in dict_queryset %}
+                                {% if food_type_set.queryset %}
+                                    <li class="categories__item">
+                                        <div class="categories__item-name scroll-to">{{ food_type_set.food_type }}</div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal1 -->
+    <div class="modal fade" id="chooseModal1" aria-hidden="true" aria-labelledby="chooseModalLabel1" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="chooseModalLabel1">Какое у вас настроение?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBodyForSmiles">
+                    <div class="smiles mx-auto" style="width: inherit">
+                        <div class="smile" id="AN">
+                            <img src="{% static 'img/smile-angry.png' %}" class="btn" data-bs-target="#chooseModal2" data-bs-toggle="modal" alt="AngrySmile">
+                        </div>
+                        <div class="smile" id="SA">
+                            <img src="{% static 'img/smile-sad.png' %}" class="btn" data-bs-target="#chooseModal2" data-bs-toggle="modal" alt="SadSmile">
+                        </div>
+                        <div class="smile" id="NE">
+                            <img src="{% static 'img/smile-neutral.png' %}" class="btn" data-bs-target="#chooseModal2" data-bs-toggle="modal" alt="NeutralSmile">
+                        </div>
+                        <div class="smile" id="HA">
+                            <img src="{% static 'img/smile-happy.png' %}" class="btn" data-bs-target="#chooseModal2" data-bs-toggle="modal" alt="HappySmile">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal2 -->
+    <div class="modal fade" id="chooseModal2" aria-hidden="true" aria-labelledby="chooseModalLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="container-slot">
+
+                        <div class="container-slot-header">
+                            <div class="container-slot-close">
+                                <button type="button" class="container-slot-close-button" data-bs-dismiss="modal" aria-label="Close">
+                                    <svg fill="#000000" height="32" width="32" viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg">
+                                        <path fill="#fff" d="M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="container-slot-header-info">Посмотрим</div>
+                        </div>
+
+                        <div class="container-slot-images">
+                            <div class="slot" id="slot1">
+
+                            </div>
+                            <div class="slot" id="slot2">
+
+                            </div>
+                            <div class="slot" id="slot3">
+
+                            </div>
+                        </div>
+
+                        <div class="container-slot-spin">
+                            <button class="container-slot-spin-button">
+                                Подобрать
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    {% for food_type_set in dict_queryset %}
+        {% if food_type_set.queryset %}
+            <h2 class="menu-title" id="{{ food_type_set.food_type|cut:' ' }}">{{ food_type_set.food_type }} {% if food_type_set.food_type == "Популярное" %}🔥{% endif %}</h2>
+            <ul class="menu-list">
+            {% for i in food_type_set.queryset %}
+                {% if i.available %}
+                    <li class="menu-product">
+                        <div class="menu-product-img" style="background-image: url({{ i.image.url }});">
+                            <!---->
+                        </div>
+
+                        <div class="menu-product-info-container">
+                            <div class="menu-product-info">
+                                <div class="menu-product-info-block-container">
+                                    <h5 class="menu-product-title">{{ i.title }}</h5>
+                                    {{ i.weight }}
+                                </div>
+                                <div class="menu-product-price">
+                                    {{ i.price }} ₽
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="stretched-link text-dark text-decoration-none" href="/menu/detail/{{ i.id }}/"></a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/recSys.js' %}"></script>
+    <script src="{% static 'js/categories-slider.js' %}"></script>
+{% endblock %}

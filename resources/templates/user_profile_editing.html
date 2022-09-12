@@ -1,0 +1,54 @@
+{% extends "parts/commonPart.html" %}
+{% load static %}
+{% block head_title %}Профиль{% endblock %}
+{% block content %}
+    <div class="container">
+
+        <div class="profile-header">
+            Редактирование профиля
+        </div>
+
+        <div class="profile-card">
+            {% if status %}
+                <div class="alert alert-{{ status }}" role="alert">
+                {{ response_message }}
+                </div>
+            {% endif %}
+
+            <form method="POST"> {% csrf_token %}
+                {% if user.is_staff %}
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">Имя</label>
+                        <input type="text" class="form-control" id="firstName"
+                               value="{{ user_profile.first_name }}" placeholder="" name="first_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Фамилия</label>
+                        <input type="text" class="form-control" id="lastName"
+                               value="{{ user_profile.last_name }}" placeholder="" name="last_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="is_active" class="form-check-label">Активен ли пользователь(не заблокирован)? (внимательно!)</label>
+                        <input type="checkbox" class="form-check-input" name="is_active" id="is_active"
+                               {% if user_profile.is_active %} checked {% endif %}>
+                    </div>
+                {% endif %}
+                <div class="mb-3">
+                    <label for="universityId" class="form-label">University id</label>
+                    <input type="text" class="form-control" id="universityId"
+                           value="{{ user_profile.university_id }}" placeholder="" name="university_id">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email"
+                           value="{{ user_profile.email }}" placeholder="" name="email">
+                </div>
+                <button class="btn btn-success" type="submit">Изменить</button>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <!-- Meta -->
+{% endblock %}

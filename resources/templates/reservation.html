@@ -1,0 +1,127 @@
+{% extends "parts/commonPart.html" %}
+{% load static %}
+{% block head_title %}Бронирование столиков{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="accordion" id="accordion">
+            {% for i in queryset %}
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header" id="heading{{ i.id }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ i.id }}" aria-expanded="false" aria-controls="collapse{{ i.id }}">
+                        {{ i.title }}
+                        </button>
+                    </h2>
+
+                    <div id="collapse{{ i.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ i.id }}" data-bs-parent="#accordion">
+
+                        <div class="accordion-body">
+
+                            <div class="card">
+
+                                <img src="{{ i.image.url }}" class="card-img-top" alt="{{ i.title }}">
+
+                                <div class="card-body" id="table{{ i.id }}">
+                                    <h5 class="card-title">{{ i.title }}</h5>
+
+                                    <p class="card-text">Выберите дату для просмотра занятых мест</p>
+
+                                    <form class="row g-3 reservation" method="POST" id="reservation{{ i.id }}"> {% csrf_token %}
+                                        <input type="number" class="form-control" name="table_id" value="{{ i.id }}" hidden="true">
+
+                                        <div class="input-group">
+                                            <span class="table_id" hidden="true">{{ i.id }}</span>
+                                            <label class="input-group-text" for="dateShow{{ i.id }}">День</label>
+                                            <input class="dateShow" type="date" id="dateShow{{ i.id }}"
+                                                   name="date_of_reservation" value=""
+                                                   min="" max="" required>
+                                        </div>
+
+                                        <p class="card-text fw-bold mb-0" hidden="true" id="hForTable{{ i.id }}">Список уже забронированного времени</p>
+
+                                        <table class="table" hidden="true" id="tableDateShow{{ i.id }}">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">University id</th>
+                                                    <th scope="col">Имя</th>
+                                                    <th scope="col">Время</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+
+                                        {% if user.is_authenticated %}
+                                            <p class="card-text mb-0">Выберите время</p>
+
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="timeForTable{{ i.id }}">Время</label>
+                                                <select class="form-select" id="timeForTable{{ i.id }}"
+                                                        name="time_of_reservation" required>
+                                                    <option selected disabled value="">Выберите...</option>
+                                                </select>
+                                            </div>
+
+                                            <div id="alertForReservation{{ i.id }}"></div>
+
+                                            <div class="col-12">
+                                                <button class="btn btn-success" type="submit">Забронировать</button>
+                                            </div>
+                                        {% else %}
+                                            <p class="card-text mb-0">Для бронирования требуется авторизация</p>
+                                            <div class="">
+                                                <a href="/login/vk-oauth2/" class="">
+                                                    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.5306 6.5306C4 9.06119 4 13.1341 4 21.28V22.72C4 30.8659 4 34.9388 6.5306 37.4694C9.0612 40 13.1341 40 21.28 40H22.72C30.8659 40 34.9388 40 37.4694 37.4694C40 34.9388 40 30.8659 40 22.72V21.28C40 13.1341 40 9.06119 37.4694 6.5306C34.9388 4 30.8659 4 22.72 4H21.28C13.1341 4 9.0612 4 6.5306 6.5306ZM10 15C10.1949 24.3694 14.8719 30 23.0718 30H23.5366V24.6396C26.5497 24.9399 28.8281 27.1471 29.7425 30H34C32.8307 25.7357 29.7575 23.3784 27.8387 22.4775C29.7575 21.3663 32.4558 18.6637 33.1004 15H29.2327C28.3932 17.973 25.9051 20.6757 23.5366 20.9309V15H19.6689V25.3904C17.2704 24.7898 14.2423 21.8769 14.1074 15H10Z" fill="currentColor"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </form>
+                                    {% if user.is_staff %}
+                                        <a type="button" class="btn btn-primary mt-3" href="/reservation/table/change/{{ i.id }}/">
+                                        Изменить стол
+                                        </a>
+
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#deleteTable{{ i.id }}">
+                                        Удалить стол
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deleteTable{{ i.id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title alert alert-warning" id="exampleModalLabel">Внимание</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            Вы уверены?
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-secondary" href="/reservation/delete-table/{{ i.id }}/" type="submit">Удалить стол</a>
+                                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}
+{% block script %}
+    <script src="{% static 'js/reservation.js' %}"></script>
+    {{ request.user.id|json_script:"user_id" }}
+    {{ request.user.is_staff|json_script:"is_staff" }}
+{% endblock %}

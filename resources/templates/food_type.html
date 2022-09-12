@@ -1,0 +1,45 @@
+{% extends "parts/commonPart.html" %}
+{% block head_title %}Добавить в меню{% endblock %}
+{% block content %}
+    <div class="container">
+
+        <h3 class="mb-4">Добавить/изменить/удалить тип еды</h3>
+
+        {% if status %}
+            <div class="alert alert-{{ status }}" role="alert">
+            {{ response_message }}
+            </div>
+        {% endif %}
+
+        <form method="POST"> {% csrf_token %}
+            <div class="mb-3">
+                <label for="food-type-detail" class="form-label">Тип еды</label>
+                <input type="text" class="form-control" id="food-type-detail"
+                       placeholder="" name="title" required>
+            </div>
+            <button class="btn btn-success mb-3" type="submit">Добавить</button>
+        </form>
+
+        <div class="input-group mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Тип еды</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ft in instance %}
+                        <tr>
+                            <td>{{ ft.title }}</td>
+                            <td>
+                                <a class="btn btn-outline-primary" href="/menu/food-type/update/{{ ft.id }}/">Изменить</a>
+                                <a class="btn btn-outline-danger" href="/menu/food-type/delete/{{ ft.id }}/">Удалить</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
