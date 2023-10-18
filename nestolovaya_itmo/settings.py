@@ -13,23 +13,26 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 import storages.backends.s3boto3
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '***'
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '***')
+# SECRET_KEY = 'django-insecure-hvx3c5)61cgt=#)209tcl+f-8kgppnz29)c%6f^kfbt@z=v#bm'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-hvx3c5)61cgt=#)209tcl+f-8kgppnz29)c%6f^kfbt@z=v#bm')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['nestolovaya.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = []
+
+EXTERNAL_HOSTNAME = os.environ.get('EXTERNAL_HOSTNAME')
+if EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -102,8 +105,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nestolovaya_itmo',
-        'USER': '***',
-        'PASSWORD': '***',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -158,10 +161,10 @@ MEDIA_URL = '/media/'
 
 # S3 BUCKETS CONFIG
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_BUCKET_NAME = 'for-nestolovaya'
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '***')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '***')
+AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
 AWS_S3_REGION_NAME = 'ru-central1'
@@ -172,7 +175,7 @@ AWS_DEFAULT_ACL = None
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Heroku: Update database configuration from $DATABASE_URL.
+# Update database configuration from $DATABASE_URL.
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
