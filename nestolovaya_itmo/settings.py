@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-hvx3c5)61cgt=#)209tcl+f-8kgppnz29)c%6f^kfbt@z=v#bm')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
+DEBUG = os.environ.get('DJANGO_DEBUG', '0').lower() in ['true', 't', '1']
 
 ALLOWED_HOSTS = []
 
@@ -106,7 +106,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nestolovaya_itmo',
         'USER': 'postgres',
-        'PASSWORD': '1234',
+        'PASSWORD': '7465',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -166,8 +166,8 @@ AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
-AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
-AWS_S3_REGION_NAME = 'ru-central1'
+AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL')
+AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
 
 AWS_DEFAULT_ACL = None
 
