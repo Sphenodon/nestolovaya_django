@@ -3,6 +3,7 @@ import datetime
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max, F
+from django.forms import modelform_factory
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
@@ -421,11 +422,16 @@ def user_profile(request, username):
 def user_profile_editing(request, username):
     if request.user.is_staff or request.user.username == username:
         user_profile_data = get_object_or_404(User, username=username)
+        if request.user.is_staff:
+            fields = ['first_name', 'last_name', 'university_id', 'is_active']
+        else:
+            fields = ['university_id']
 
         if request.method == 'POST':
-            form = CustomUserChangeForm(request.POST, instance=user_profile_data)
-            if form.is_valid():
-                form.save()
+            form = modelform_factory(User, form=CustomUserChangeForm, fields=fields)
+            userForm = form(request.POST, instance=user_profile_data)
+            if userForm.is_valid():
+                userForm.save()
 
                 return HttpResponseRedirect(f'/user/{username}/')
             else:

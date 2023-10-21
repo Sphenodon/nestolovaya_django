@@ -15,7 +15,7 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm):
         model = User
-        fields = ('first_name', 'last_name', 'university_id', 'is_active')
+        fields = []
 
 
 class MenuForm(forms.ModelForm):
