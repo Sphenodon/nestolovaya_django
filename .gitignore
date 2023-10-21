@@ -4,3 +4,4 @@ venv
 __pycache__
 resources/templates/account
 resources/media
+resources/static
