@@ -3,5 +3,6 @@ venv
 .git
 __pycache__
 resources/templates/account
+resources/templates/registration
 resources/media
 resources/static

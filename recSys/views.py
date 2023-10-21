@@ -418,10 +418,9 @@ def user_profile(request, username):
     return render(request, 'user_profile.html', context)
 
 
-@login_required
 def user_profile_editing(request, username):
     if request.user.is_staff or request.user.username == username:
-        user_data = User.objects.only('username', 'first_name', 'last_name', 'university_id', 'is_active', 'email')
+        user_data = User.objects.only('username', 'first_name', 'last_name', 'university_id', 'is_active')
         user_profile_data = get_object_or_404(user_data, username=username)
 
         if request.method == 'POST':
@@ -449,7 +448,6 @@ def user_profile_editing(request, username):
         return HttpResponseRedirect(f'/user/{username}/')
 
 
-@login_required
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect('/')
