@@ -407,7 +407,7 @@ def user_profile(request, username):
     try:
         user_id_social = UserSocialAuth.objects.filter(user_id=user_profile_data.get('id')).only('uid')[0]
     except IndexError:
-        user_id_social = 0
+        user_id_social = None
     print(user_id_social)
 
     context = {
@@ -420,8 +420,7 @@ def user_profile(request, username):
 
 def user_profile_editing(request, username):
     if request.user.is_staff or request.user.username == username:
-        user_data = User.objects.values('username', 'first_name', 'last_name', 'university_id', 'is_active')
-        user_profile_data = get_object_or_404(user_data, username=username)
+        user_profile_data = get_object_or_404(User, username=username)
 
         if request.method == 'POST':
             form = CustomUserChangeForm(request.POST, instance=user_profile_data)
