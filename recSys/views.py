@@ -420,7 +420,7 @@ def user_profile(request, username):
 
 def user_profile_editing(request, username):
     if request.user.is_staff or request.user.username == username:
-        user_data = User.objects.only('username', 'first_name', 'last_name', 'university_id', 'is_active')
+        user_data = User.objects.values('username', 'first_name', 'last_name', 'university_id', 'is_active')
         user_profile_data = get_object_or_404(user_data, username=username)
 
         if request.method == 'POST':
