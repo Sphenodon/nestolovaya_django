@@ -252,15 +252,12 @@ def menu_detail(request, menu_id):
 
 
 def menu_add(request):
-    if request.user.is_staff and request.method == 'GET':
-        food_type = Menu.FOOD_TYPE
-        food_type_detail = FoodTypeDetail.objects.values('id', 'title')
-        context = {
-            'food_type': food_type,
-            'food_type_detail': food_type_detail,
-        }
-
-        return render(request, 'menu_add.html', context)
+    food_type = Menu.FOOD_TYPE
+    food_type_detail = FoodTypeDetail.objects.values('id', 'title')
+    context = {
+        'food_type': food_type,
+        'food_type_detail': food_type_detail,
+    }
 
     if request.user.is_staff and request.method == 'POST':
         form = MenuForm(request.POST, request.FILES)
@@ -275,21 +272,21 @@ def menu_add(request):
                         menu_id=saved_form.id
                     )
 
-            context = {
+            context.update({
                 'status': 'success',
                 'response_message': 'Успешно добавлено'
-            }
+            })
 
             return render(request, 'menu_add.html', context)
         else:
-            context = {
+            context.update({
                 'status': 'warning',
                 'response_message': 'Не удалось добавить в меню',
-            }
+            })
 
             return render(request, 'menu_add.html', context)
 
-    return HttpResponseRedirect('/')
+    return render(request, 'menu_add.html', context)
 
 
 def menu_update(request, menu_id):
