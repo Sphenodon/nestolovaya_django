@@ -89,7 +89,7 @@ body{
 }
 
 .categories__container{
-    width: calc(100% - 16px);
+    width: 75%;
     box-sizing: border-box;
     padding: 12px;
 }
@@ -139,6 +139,10 @@ body{
     z-index: 10;
     background-color: #fff;
     box-shadow: 0 1px 0 0 #e3e4e6;
+}
+
+.categories *::-webkit-scrollbar {
+    display: none;
 }
 
 /* for menu product */
@@ -500,10 +504,6 @@ ol, ul{
 
 a:active{
     background-color: #919399 !important;
-}
-
-::-webkit-scrollbar {
-    display: none;
 }
 
 ::selection {
